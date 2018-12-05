@@ -73,7 +73,11 @@ public class HuffProcessor {
 				pq.add(new HuffNode(i, counts[i],null,null));
 			}
 		}
-
+		
+		if (myDebugLevel >= DEBUG_HIGH) {
+			System.out.printf("pq created with %d nodes\n", pq.size());
+		}
+		
 		while (pq.size() > 1) {
 			HuffNode left = pq.remove();
 			HuffNode right = pq.remove();
@@ -97,6 +101,9 @@ public class HuffProcessor {
 		
 		if (root.myLeft == null && root.myRight == null) {
 			encodings[root.myValue] = string;
+			if (myDebugLevel >= DEBUG_HIGH) {
+				System.out.printf("encoding for %d is %s\n", root.myValue, string);
+			}
 			return;
 		}
 		codingHelper(root.myLeft, string +"0", encodings);
@@ -111,6 +118,9 @@ public class HuffProcessor {
 		if (root.myLeft == null && root.myRight == null) {
 			out.writeBits(1, 1);
 			out.writeBits(BITS_PER_WORD + 1, root.myValue);
+			if (myDebugLevel >= DEBUG_HIGH) {
+				System.out.println("wrote leaf for tree " + root.myValue);
+			}
 			return;
 		} else {
 			out.writeBits(1, 0);
